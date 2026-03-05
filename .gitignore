@@ -1,0 +1,16 @@
+# Composer
+/vendor/
+composer.lock
+
+# PHP
+*.log
+*.cache
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Build artefacts
+/build-metadata/

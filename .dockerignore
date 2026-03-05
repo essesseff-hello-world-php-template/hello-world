@@ -1,0 +1,16 @@
+.git
+.gitignore
+.github
+README.md
+build-metadata/
+
+# Composer dev artefacts – production image only needs vendor/ after composer install
+# (vendor/ is rebuilt inside the image, so we exclude the local copy too)
+vendor/
+composer.lock
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
