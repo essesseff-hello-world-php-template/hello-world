@@ -10,10 +10,12 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 require __DIR__ . '/vendor/autoload.php';
 
 // Configure logging (to stderr, consistent with 12-factor / container conventions)
+if (!function_exists('logInfo')) {
 function logInfo(string $message): void
 {
     $timestamp = (new DateTimeImmutable())->format('Y-m-d\TH:i:s.u');
-    fwrite(STDERR, "{$timestamp} - hello-world - INFO - {$message}" . PHP_EOL);
+    error_log("{$timestamp} - hello-world - INFO - {$message}");
+}
 }
 
 // Read environment variables with defaults
@@ -21,10 +23,12 @@ $port        = getenv('PORT')        ?: '8080';
 $environment = getenv('ENVIRONMENT') ?: 'unknown';
 $version     = getenv('VERSION')     ?: 'unknown';
 
+if (!function_exists('getHostname')) {
 function getHostname(): string
 {
     $hostname = gethostname();
     return ($hostname !== false) ? $hostname : 'unknown';
+}
 }
 
 $app = AppFactory::create();

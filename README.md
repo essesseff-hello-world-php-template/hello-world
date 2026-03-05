@@ -16,15 +16,15 @@ Setup **GitHub → Argo CD → K8s** in *less than 5 minutes* with the [essessef
 
 ## Tech Stack
 
-| This PHP template |
-|---|
-| PHP 8.3 |
-| Slim Framework 4 |
-| PHP built-in server (dev/container) |
-| Composer 2 |
-| composer.json |
+| Python / FastAPI template | This PHP template |
+|---|---|
+| Python 3.14 | PHP 8.3 |
+| FastAPI | Slim Framework 4 |
+| uvicorn | PHP built-in server (dev/container) |
+| pip / uv | Composer 2 |
+| requirements.txt | composer.json |
 
-> **Note on `/docs` and `/redoc`:** Slim does not provide this out of the box. If you need OpenAPI/Swagger UI, add [zircote/swagger-php](https://github.com/zircote/swagger-php) to your `composer.json` and serve the spec from a `/docs` route.
+> **Note on `/docs` and `/redoc`:** FastAPI auto-generates interactive API documentation. Slim does not provide this out of the box. If you need OpenAPI/Swagger UI, add [zircote/swagger-php](https://github.com/zircote/swagger-php) to your `composer.json` and serve the spec from a `/docs` route.
 
 ## essesseff App GitHub Repository Structure
 
