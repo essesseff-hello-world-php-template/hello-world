@@ -38,6 +38,28 @@ Setup **GitHub → Argo CD → K8s** in *less than 5 minutes* with the [essessef
 * Argo CD Config STAGING: [hello-world-argocd-staging](https://github.com/essesseff-hello-world-php-template/hello-world-argocd-staging)
 * Argo CD Config PROD: [hello-world-argocd-prod](https://github.com/essesseff-hello-world-php-template/hello-world-argocd-prod)
 
+### Why so many repos?
+
+essesseff favors simplicity and clear boundaries over a single repo with many rules.:
+
+#### Simpler RBAC: 
+
+Each repo is one permission boundary.  essesseff roles map directly to GitHub repo access (e.g. who can push to config-prod).  There are no path-based approval rules, CODEOWNERS, or branch policies to maintain—just straightforward repo-level permissions, i.e.:
+  - Developer ~ DEV
+  - QA Engineer ~ QA
+  - Release Engineer ~ STAGING and PROD
+  - DevOps Engineer ~ all of the above
+
+#### Distinct change history and audit trail: 
+
+Each environment has its own git history.  "What changed in prod?" means opening the prod config repo and reading the log.  No filtering a monorepo by path or digging through unrelated commits.  Blame, compliance, and rollbacks stay scoped to the environment.
+
+#### Simplicity via separation: 
+
+We chose "more repos, each with a single concern and simple rules" over "one repo with complex conventions to get the same isolation."  For a golden path and role-based control, that trade keeps the model easy to explain and operate.
+
+*That said, if you prefer more of a DRY than WET approach to managing your Helm configs, this template does provide a fairly WET starting point only.  One way that you could take a more DRY approach while still retaining the benefits of the template as designed would be to separate the Helm Chart and any default values out from the app-/env-specific context(s) into other repo(s) (such as at an org or global context), and then also update your Argo CD config to first reference these as defaults and subsequently reference your app-/env-specific values.yaml.*
+
 ## Develop, Build and Deploy
 
 * **Branch Strategy**: Single `main` branch (trunk-based)
@@ -47,6 +69,26 @@ Setup **GitHub → Argo CD → K8s** in *less than 5 minutes* with the [essessef
 * **GitOps Deploy**: DEV, QA, STAGING, PROD (managed by Argo CD by updating config-env values.yaml)
 * **API Promote/Deploy**: DEV, QA, STAGING, PROD (via [essesseff public API](https://www.essesseff.com/docs/api))
 * **K8s Namespace**: this template assumes a mapping of GitHub organization ~ K8s namespace i.e. string replace `essesseff-hello-world-php-template` with your K8s namespace
+
+## Golden Path App Template Architecture Diagram
+
+![Golden Path App Template Diagram](https://www.essesseff.com/images/architecture/essesseff-app-template-minus-subscription-light-mode.svg)
+
+*Note: GitHub and K8s Licensed and Hosted Separately. This diagram shows an example of three K8s-deployed apps following the build-once-deploy-many "essesseff app" model, each app with its own Source and Helm-config-env GitHub repos (and Argo CD GitHub repos (not shown)), and with deployments distributed across as few or as many K8s clusters as desired, both on an env-specific basis as well as on a one-or-many deployments per environment basis. The essesseff app templates easily support and provide standardized configuration and automation OOTB for all of the above.*
+
+## Onboarding
+
+### For essesseff subscribers
+
+It is highly recommended that you use the [essesseff onboarding utility](https://github.com/essesseff/essesseff-onboarding-utility) from a shell terminal with kubectl access to your K8s cluster(s) to onboard to essesseff, GitHub, Argo CD and K8s *typically in under 5 minutes* per essesseff app
+
+Otherwise, you may similarly make use of the [essesseff public API](https://www.essesseff.com/docs/api) for onboarding and/or use the essesseff UX and shell terminal with kubectl access to your K8s cluster(s), in combination with onboarding scripts in your essesseff app argocd-env repos, to onboard your essesseff app(s) to essesseff, GitHub, Argo CD and K8s.
+
+### If not an essesseff subscriber
+
+It is highly recommended that you use the [essesseff onboarding utility](https://github.com/essesseff/essesseff-onboarding-utility) in `--non-essesseff-subscriber-mode` from a shell terminal with kubectl access to your K8s cluster(s) to onboard to GitHub, Argo CD and K8s *typically in under 5 minutes* per essesseff app.  
+
+Otherwise, you can still freely use all of the repos in this golden path template, edit app name and namespace labels according to your needs (typically via global string replacements in the file names and contents), and then run the onboarding scripts included in each of your argocd-env repos from a shell terminal with kubectl access to you K8s cluster(s) to get fully onboarded to GitHub, Argo CD and K8s in about ~20 minutes.
 
 ## Development Workflow
 
